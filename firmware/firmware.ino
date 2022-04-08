@@ -1,14 +1,13 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <DHT.h>
+#include "config.h"
 
 #define DHTPIN 4
 #define DHTTYPE DHT11
 #define BROKER_URL "192.168.0.68"
 #define MSG_SIZE 24
 
-const char* ssid = "Fibertel WiFi400 2.4GHz";
-const char* password = "24RoBrii1910";
 char msg[MSG_SIZE];
 
 DHT dht(DHTPIN, DHTTYPE);
@@ -28,7 +27,7 @@ void setup(void)
     delay(500);
   }
   Serial.println("");
-  Serial.print("Connected");
+  Serial.print("Connected to WiFi");
 
   mqtt_client.setServer(BROKER_URL, 1883);
   delay(2000);
@@ -42,6 +41,6 @@ void loop()
 
  float t = dht.readTemperature();
  snprintf(msg, MSG_SIZE, "%f", t);
- mqtt_client.publish("hola/mundo", msg);
+ mqtt_client.publish("home/room/temp", msg);
  delay(2000);
 }
