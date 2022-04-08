@@ -9,3 +9,10 @@ services:
       - 9001:9001
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+  listener:
+    build: .
+    container_name: listener
+    depends_on:
+      - broker
+    environment:
+      PYTHONUNBUFFERED: 1
