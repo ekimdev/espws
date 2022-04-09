@@ -3,7 +3,7 @@
 #include <DHT.h>
 #include "config.h"
 
-#define DHTPIN 4
+#define DHTPIN 13
 #define DHTTYPE DHT11
 #define BROKER_URL "192.168.0.68"
 #define MSG_SIZE 24
