@@ -14,5 +14,26 @@ services:
     container_name: listener
     depends_on:
       - broker
+      - db
     environment:
       PYTHONUNBUFFERED: 1
+      DOCKER_LISTENER_ORG: espws
+      DOCKER_LISTENER_TOKEN: ${INFLUX_TOKEN}
+      DOCKER_LISTENER_BUCKET: db0
+  db:
+    image: influxdb
+    container_name: influx
+    ports:
+      - 8086:8086
+    volumes:
+      - influx-storage:/var/lib/influxdb2
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUX_USERNAME}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUX_PASSWORD}
+      DOCKER_INFLUXDB_INIT_ORG: espws
+      DOCKER_INFLUXDB_INIT_BUCKET: db0
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
+
+volumes:
+  influx-storage:
