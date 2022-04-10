@@ -1,14 +1,15 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <DHT.h>
-#include "config.h"
+#include "config.h"  // put your network data here
 
 #define DHTPIN 13
 #define DHTTYPE DHT11
 #define BROKER_URL "192.168.0.68"
 #define MSG_SIZE 24
 
-char msg[MSG_SIZE];
+char msg_temperature[MSG_SIZE];
+char msg_humidity[MSG_SIZE];
 
 DHT dht(DHTPIN, DHTTYPE);
 WiFiClient wifi_client;
@@ -40,7 +41,13 @@ void loop()
  mqtt_client.loop();
 
  float t = dht.readTemperature();
- snprintf(msg, MSG_SIZE, "%f", t);
- mqtt_client.publish("home/room/temp", msg);
- delay(2000);
+ float h = dht.readHumidity();
+
+ snprintf(msg_temperature, MSG_SIZE, "%f", t);
+ mqtt_client.publish("home/room/temperature", msg_temperature);
+
+ snprintf(msg_humidity, MSG_SIZE, "%f", h);
+ mqtt_client.publish("home/room/humidity", msg_humidity);
+
+ delay(5000);
 }

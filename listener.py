@@ -1,6 +1,6 @@
 import os
 
-from influxdb_client import InfluxDBClient
+from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 from paho.mqtt import client
 
@@ -10,30 +10,35 @@ org = os.getenv("DOCKER_LISTENER_ORG")
 token = os.getenv("DOCKER_LISTENER_TOKEN")
 url = "http://db:8086"
 
-influxdb_client = InfluxDBClient(
-    url=url,
-    token=token,
-    org=org
-)
+influxdb_client = InfluxDBClient(url=url, token=token, org=org)
 
 write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
 
 
 def on_connect(client, userdata, flags, rc):
-    client.subscribe("home/room/temp")
+    client.subscribe("home/room/temperature")
+    client.subscribe("home/room/humidity")
 
 
 def on_message(client, userdata, msg):
-    temperature = float(msg.payload.decode())
-
-    print("Writing to database...")
-    sequence = [
-        f"temperature,host=room value={temperature}",
-        # "mem,host=host1 available_percent=15.856523",
-    ]
-    write_api.write(bucket, org, sequence)
-
-    print(f"Room temperature: {temperature:.2f}")
+    if msg.topic == "home/room/temperature":
+        data = float(msg.payload.decode())
+        write_api.write(
+            bucket,
+            org,
+            Point("temperature")
+            .tag("location", "room")
+            .field("temperature_value", data),
+        )
+        print(f"Room temperature: {data:.2f}")
+    elif msg.topic == "home/room/humidity":
+        data = float(msg.payload.decode())
+        write_api.write(
+            bucket,
+            org,
+            Point("humidity").tag("location", "room").field("humidity_value", data),
+        )
+        print(f"Room humidity: {data:.2f}")
 
 
 mqtt_client = client.Client()
