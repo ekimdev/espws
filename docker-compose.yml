@@ -20,6 +20,7 @@ services:
       DOCKER_LISTENER_ORG: espws
       DOCKER_LISTENER_TOKEN: ${INFLUX_TOKEN}
       DOCKER_LISTENER_BUCKET: db0
+      DOCKER_LISTENER_BROKER_URL: ${BROKER_URL}
   db:
     image: influxdb
     container_name: influx

@@ -5,6 +5,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 from paho.mqtt import client
 
 
+broker_url = os.getenv("DOCKER_LISTENER_BROKER_URL")
 bucket = os.getenv("DOCKER_LISTENER_BUCKET")
 org = os.getenv("DOCKER_LISTENER_ORG")
 token = os.getenv("DOCKER_LISTENER_TOKEN")
@@ -45,5 +46,5 @@ mqtt_client = client.Client()
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
 
-mqtt_client.connect("192.168.0.68")
+mqtt_client.connect(broker_url)
 mqtt_client.loop_forever()
