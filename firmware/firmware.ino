@@ -3,9 +3,7 @@
 #include <DHT.h>
 #include "config.h"  // put your network data here
 
-#define DHTPIN 13
 #define DHTTYPE DHT11
-#define BROKER_URL "192.168.0.68"
 #define MSG_SIZE 24
 
 char msg_temperature[MSG_SIZE];
@@ -21,7 +19,7 @@ void setup(void)
 
   dht.begin();
   WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   while(WiFi.status() != WL_CONNECTED){
     Serial.print(".");
