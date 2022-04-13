@@ -47,5 +47,5 @@ void loop()
  snprintf(msg_humidity, MSG_SIZE, "%f", h);
  mqtt_client.publish("home/room/humidity", msg_humidity);
 
- delay(5000);
+ delay(TIME_DELAY);
 }
