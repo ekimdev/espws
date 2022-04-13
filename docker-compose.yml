@@ -21,6 +21,7 @@ services:
       DOCKER_LISTENER_TOKEN: ${INFLUX_TOKEN}
       DOCKER_LISTENER_BUCKET: db0
       DOCKER_LISTENER_BROKER_URL: ${BROKER_URL}
+    command: python listener.py
   db:
     image: influxdb
     container_name: influx
@@ -35,6 +36,16 @@ services:
       DOCKER_INFLUXDB_INIT_ORG: espws
       DOCKER_INFLUXDB_INIT_BUCKET: db0
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_TOKEN}
+  api:
+    build: .
+    container_name: api
+    ports:
+      - 8000:8000
+    command: uvicorn --host 0.0.0.0 api:app
+    environment:
+      DOCKER_API_ORG: espws
+      DOCKER_API_TOKEN: ${INFLUX_TOKEN}
+
 
 volumes:
   influx-storage:

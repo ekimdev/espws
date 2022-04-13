@@ -1,2 +1,4 @@
 paho-mqtt
 influxdb-client
+fastapi
+uvicorn
