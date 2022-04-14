@@ -18,7 +18,7 @@ def get_table_from_query(query: str):
 @app.get("/temperature")
 def temperature_resource():
     temperature_query = ' from(bucket:"db0")\
-    |> range(start: -10s)\
+    |> range(start: -20m)\
     |> filter(fn:(r) => r._measurement == "temperature")\
     |> filter(fn: (r) => r.location == "room")\
     |> filter(fn:(r) => r._field == "temperature_value" ) '
@@ -37,7 +37,7 @@ def temperature_resource():
 @app.get("/humidity")
 def humidity_resource():
     humidity_query = ' from(bucket:"db0")\
-    |> range(start: -10m)\
+    |> range(start: -20m)\
     |> filter(fn:(r) => r._measurement == "humidity")\
     |> filter(fn: (r) => r.location == "room")\
     |> filter(fn:(r) => r._field == "humidity_value" ) '
